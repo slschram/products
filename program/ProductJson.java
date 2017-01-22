@@ -13,42 +13,120 @@ import org.json.simple.JSONObject;
 // To run: java -cp .:json-simple-1.1.1.jar ProductJson
 public class ProductJson {
    public static void main(String args[]) {
+    while (true){
       Scanner scanner = new Scanner(System.in);
       scanner.useLocale(Locale.ENGLISH);
 
       System.out.println("Enter the product number: ");
       String num = scanner.nextLine();
+      int counter = 0;
       //9 is the minimum char count for num
       //11 is the max char count for num
-      String brandName = getBrand(num);
-      int width = getWidth(num);
+      if (num.equals("end")){
+        break;
+      } else {
+          String brandName = getBrand(num, scanner);
+          int width = getWidth(num);
 
-      int lengthResult[] = getLength(num);
-      int lengthFt = lengthResult[0];
-      int lengthIn = lengthResult[1];
+          int lengthResult[] = getLength(num);
+          int lengthFt = lengthResult[0];
+          int lengthIn = lengthResult[1];
 
-      double priceResult[] = calculatePrice();
-      double shelter = priceResult[0];
-      double harbor = priceResult[1];
+          double priceResult[] = calculatePrice();
+          double shelter = priceResult[0];
+          double harbor = priceResult[1];
 
-      createJSON(num, brandName, width, lengthFt, lengthIn, shelter, harbor);
+          createJSON(counter, num, brandName, width, lengthFt, lengthIn, shelter, harbor);
 
-      System.out.println("Product Number: " + num);
-      System.out.println("Brand: " + brandName);
-      System.out.println("Width: " + width + "in");
-      System.out.println("Length: " + lengthFt + "ft" + lengthIn + "in");
-      System.out.println("Shelter Price: " + shelter);
-      System.out.println("Harbor Price: " + harbor);
-
-    }
+          counter ++;
+        }
+      }
+  }
 
     // GET AND ASSIGN BRAND NAME
-    public static String getBrand(String num){
+    public static String getBrand(String num, Scanner scanner){
       String brandName = "";
-      if(num.substring(0,2).toUpperCase().equals("SM")){
+      // Get the first two characters of the input
+      String firstTwo = num.substring(0,2).toUpperCase();
+      // Determine if the third character is a number
+      // SM, BK, DK, DR, DL, FL, HM, HW, SS, MS, LS, MX, NM, CL, PP, PD, RL, VB
+      boolean char3 = Character.isDigit(num.charAt(2));
+      String firstThree = num.substring(0,3).toUpperCase();
+      // Determine if the fourth character is a number
+      // BKT, HWA, MXT, CLT
+      boolean char4 = Character.isDigit(num.charAt(3));
+      String firstFour = num.substring(0,4).toUpperCase();
+      // Determine if the fifth character is a number
+      // CLTZ
+
+      // if(char3 == true){
+      //   switch(firstTwo){
+      //     case "SM": brandName = "ShoreMaster®";
+      //       break;
+      //     case "BK": brandName = "Beach King";
+      //       break;
+      //     case "DK": brandName = "DAKA";
+      //       break;
+      //     case "DR": brandName = "Dock'Rite";
+      //       break;
+      //     case "DL": brandName = "DuraLift";
+      //       break;
+      //     case "FL": brandName = "FLOE";
+      //       break;
+      //     case "HM": brandName = "Harbor Master";
+      //       break;
+      //     case "HW": brandName = "Hewitt Deluxe Front";
+      //       break;
+      //     case "SS": brandName = "ShoreStation® Aluminum";
+      //       break;
+      //     case "MS": brandName = "ShoreStation® Steel";
+      //       break;
+      //     case "LS": brandName = "Lake Shore Products";
+      //       break;
+      //     case "MX": brandName = "Max Docks";
+      //       break;
+      //     case "NM": brandName = "Newmans";
+      //       break;
+      //     case "CL": brandName = "Nucraft/Craftlander";
+      //       break;
+      //     case "PP": brandName = "Pier Pleasure";
+      //       break;
+      //     case "PD": brandName = "Porta-Dock";
+      //       break;
+      //     case "RL": brandName = "RidgeLine";
+      //       break;
+      //     case "VB": brandName = "Vibo";
+      //       break;
+      //   }
+      //   return brandName;
+      // } else if(char3 == true){
+      //   switch(firstThree){
+      //     case "BKT": brandName = "Beach King Tower";
+      //       break;
+      //     case "HWA": brandName = "Hewitt Flat Front";
+      //       break;
+      //     case "MXT": brandName = "Max Docks Tower";
+      //       break;
+      //     case "CLT": brandName = "Nucraft/Craftlander High Top Canopy";
+      //       break;
+      //   }
+      //   return brandName;
+      // } else if(char4 == true) {
+      //   switch(firstThree){
+      //     case "CLTZ": brandName = "Nucraft/Craftlander High Top Zip Tower";
+      //       break;
+      //   }
+      //   return brandName;
+      // } else {
+      //   System.out.println("Brand not recognized, try again.");
+      //   String newNum = scanner.nextLine();
+      //   brandName = getBrand(newNum, scanner);
+      // }
+
+      if(firstTwo.equals("SM") && char3 == true){
         brandName = "ShoreMaster®";
       }
-      else if(num.substring(0,2).toUpperCase().equals("BK")){
+      else if(firstTwo.equals("BK")){
         if(num.substring(0,3).toUpperCase().equals("BKT")){
           brandName = "Beach King Tower";
         }
@@ -56,39 +134,39 @@ public class ProductJson {
           brandName = "Beach King";
         }
       }
-      else if(num.substring(0,2).toUpperCase().equals("DK")){
+      else if(firstTwo.equals("DK")){
         brandName = "DAKA";
       }
-      else if(num.substring(0,2).toUpperCase().equals("DR")){
+      else if(firstTwo.equals("DR")){
         brandName = "Dock'Rite";
       }
-      else if(num.substring(0,2).toUpperCase().equals("DL")){
+      else if(firstTwo.equals("DL")){
         brandName = "DuraLift";
       }
-      else if(num.substring(0,2).toUpperCase().equals("FL")){
+      else if(firstTwo.equals("FL")){
         brandName = "FLOE";
       }
-      else if(num.substring(0,2).toUpperCase().equals("HM")){
+      else if(firstTwo.equals("HM")){
         brandName = "Harbor Master";
       }
-      else if(num.substring(0,2).toUpperCase().equals("HW")){
+      else if(firstTwo.equals("HW")){
         if(num.substring(0,3).toUpperCase().equals("HWA")){
           brandName = "Hewitt Flat Front";
         }
         else {
-          brandName = "Hewitt Delux Front";
+          brandName = "Hewitt Deluxe Front";
         }
       }
-      else if(num.substring(0,2).toUpperCase().equals("SS")){
+      else if(firstTwo.equals("SS")){
         brandName = "ShoreStation® Aluminum";
       }
-      else if(num.substring(0,2).toUpperCase().equals("MS")){
+      else if(firstTwo.equals("MS")){
         brandName = "ShoreStation® Steel";
       }
-      else if(num.substring(0,2).toUpperCase().equals("LS")){
+      else if(firstTwo.equals("LS")){
         brandName = "Lake Shore Products";
       }
-      else if(num.substring(0,2).toUpperCase().equals("MX")){
+      else if(firstTwo.equals("MX")){
         if(num.substring(0,3).toUpperCase().equals("MXT")){
           brandName = "Max Docks Tower";
         }
@@ -96,35 +174,36 @@ public class ProductJson {
           brandName = "Max Docks";
         }
       }
-      else if(num.substring(0,2).toUpperCase().equals("NM")){
+      else if(firstTwo.equals("NM")){
         brandName = "Newmans";
       }
-      else if(num.substring(0,2).toUpperCase().equals("CL")){
+      else if(firstTwo.equals("CL")){
         if(num.substring(0,3).toUpperCase().equals("CLT")){
-          brandName = "Nucraft/Craftlander High Top Canopy";
+          brandName = "Nucraft Craftlander High Top Canopy";
         }
         else if(num.substring(0,4).toUpperCase().equals("CLTZ")){
-          brandName = "Nucraft/Craftlander High Top Zip Tower";
+          brandName = "Nucraft Craftlander High Top Zip Tower";
         }
         else {
-          brandName = "Nucraft/Craftlander";
+          brandName = "Nucraft Craftlander";
         }
       }
-      else if(num.substring(0,2).toUpperCase().equals("PP")){
+      else if(firstTwo.equals("PP")){
         brandName = "Pier Pleasure";
       }
-      else if(num.substring(0,2).toUpperCase().equals("PD")){
+      else if(firstTwo.equals("PD")){
         brandName = "Porta-Dock";
       }
-      else if(num.substring(0,2).toUpperCase().equals("RL")){
+      else if(firstTwo.equals("RL")){
         brandName = "RidgeLine";
       }
-      else if(num.substring(0,2).toUpperCase().equals("VB")){
+      else if(firstTwo.equals("VB")){
         brandName = "Vibo";
       }
       else {
         System.out.println("Brand not recognized, try again.");
-        System.exit(1);
+        String newNum = scanner.nextLine();
+        brandName = getBrand(newNum, scanner);
       }
 
       return brandName;
@@ -225,33 +304,31 @@ public class ProductJson {
     }
 
     // WRITE DATA AS JSON OBJECT TO FILE
-    public static void createJSON(
-    String num, String brandName,
-    int width, int lengthFt, int lengthIn,
-    double shelter, double harbor){
+    public static void createJSON(int count, String num, String brandName,
+    int width, int lengthFt, int lengthIn,double shelter, double harbor){
       JSONObject obj = new JSONObject();
-  		obj.put("Name", "liftcanopies.com");
-  		obj.put("Year", "2016");
+  		// obj.put("Name", "liftcanopies.com");
+  		// obj.put("Year", "2016");
 
-  		JSONArray products = new JSONArray();
+  		// JSONArray products = new JSONArray();
       JSONObject obj1 = new JSONObject();
-      JSONObject obj2 = new JSONObject();
+      // JSONObject obj2 = new JSONObject();
 
-  		obj2.put("id", num);
-      obj2.put("brand", brandName);
-      obj2.put("width", width);
-      obj2.put("lengthFt", lengthFt);
-      obj2.put("lengthIn", lengthIn);
-      obj2.put("shelterPrice", shelter);
-      obj2.put("harborPrice", harbor);
+  		obj1.put("id", num);
+      obj1.put("brand", brandName);
+      obj1.put("width", width);
+      obj1.put("lengthFt", lengthFt);
+      obj1.put("lengthIn", lengthIn);
+      obj1.put("shelterPrice", shelter);
+      obj1.put("harborPrice", harbor);
 
-      obj1.put("product", obj2);
+      // obj1.put("product", obj2);
 
-      products.add(obj1);
-  		obj.put("Product List", products);
+      // products.add(obj2);
+  		obj.put(num, obj1);
 
   		try {
-        FileWriter file = new FileWriter("/Users/user/Desktop/products/products.json"); {
+        FileWriter file = new FileWriter("/Users/user/Desktop/products/products.json", true); {
     			file.write(obj.toJSONString());
     			System.out.println("Successfully Copied JSON Object to File...");
     			System.out.println("\nJSON Object: " + obj);
@@ -261,6 +338,5 @@ public class ProductJson {
         e.printStackTrace();
       }
     }
-
 
 }
