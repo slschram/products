@@ -1,7 +1,16 @@
 import java.util.*;
 import java.lang.*;
 import java.text.*;
+import java.io.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
+/**
+* @author Sara Farkas
+*/
+
+// To compile: javac -cp  /Users/user/Desktop/products/program/json-simple-1.1.1.jar ProductJson.java
+// To run: java -cp .:json-simple-1.1.1.jar ProductJson
 public class ProductJson {
    public static void main(String args[]) {
 
@@ -180,6 +189,39 @@ public class ProductJson {
       System.out.println("Length: " + lengthFt + "ft" + lengthIn + "in");
       System.out.println("Shelter Price: " + shelter);
       System.out.println("Harbor Price: " + harbor);
+
+      // WRITE DATA AS JSON OBJECT TO FILE
+      JSONObject obj = new JSONObject();
+  		obj.put("Name", "liftcanopies.com");
+  		obj.put("Year", "2016");
+
+  		JSONArray products = new JSONArray();
+      JSONObject obj1 = new JSONObject();
+      JSONObject obj2 = new JSONObject();
+
+  		obj2.put("id", num);
+      obj2.put("brand", brandName);
+      obj2.put("width", width);
+      obj2.put("lengthFt", lengthFt);
+      obj2.put("lengthIn", lengthIn);
+      obj2.put("shelterPrice", shelter);
+      obj2.put("harborPrice", harbor);
+
+      obj1.put("product", obj2);
+
+      products.add(obj1);
+  		obj.put("Product List", products);
+
+  		try {
+        FileWriter file = new FileWriter("/Users/user/Desktop/products/products.json"); {
+    			file.write(obj.toJSONString());
+    			System.out.println("Successfully Copied JSON Object to File...");
+    			System.out.println("\nJSON Object: " + obj);
+          file.close();
+        }
+  		} catch (IOException e) {
+        e.printStackTrace();
+      }
     }
-    
+
 }
