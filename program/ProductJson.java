@@ -13,7 +13,6 @@ import org.json.simple.JSONObject;
 // To run: java -cp .:json-simple-1.1.1.jar ProductJson
 public class ProductJson {
    public static void main(String args[]) {
-
       Scanner scanner = new Scanner(System.in);
       scanner.useLocale(Locale.ENGLISH);
 
@@ -21,9 +20,31 @@ public class ProductJson {
       String num = scanner.nextLine();
       //9 is the minimum char count for num
       //11 is the max char count for num
-      String brandName = "";
+      String brandName = getBrand(num);
+      int width = getWidth(num);
 
-      // GET AND ASSIGN BRAND NAME
+      int lengthResult[] = getLength(num);
+      int lengthFt = lengthResult[0];
+      int lengthIn = lengthResult[1];
+
+      double priceResult[] = calculatePrice();
+      double shelter = priceResult[0];
+      double harbor = priceResult[1];
+
+      createJSON(num, brandName, width, lengthFt, lengthIn, shelter, harbor);
+
+      System.out.println("Product Number: " + num);
+      System.out.println("Brand: " + brandName);
+      System.out.println("Width: " + width + "in");
+      System.out.println("Length: " + lengthFt + "ft" + lengthIn + "in");
+      System.out.println("Shelter Price: " + shelter);
+      System.out.println("Harbor Price: " + harbor);
+
+    }
+
+    // GET AND ASSIGN BRAND NAME
+    public static String getBrand(String num){
+      String brandName = "";
       if(num.substring(0,2).toUpperCase().equals("SM")){
         brandName = "ShoreMaster®";
       }
@@ -106,7 +127,11 @@ public class ProductJson {
         System.exit(1);
       }
 
-      // GET AND ASSIGN CANOPY WIDTH
+      return brandName;
+    }
+
+    // GET AND ASSIGN CANOPY WIDTH
+    public static int getWidth(String num){
       // This will always be the last 3 chars in num
       String widthS = "";
       int width = 0;
@@ -121,12 +146,17 @@ public class ProductJson {
         width = Integer.parseInt(widthS);
       }
 
-      // GET AND ASSIGN CANOPY LENGTH
+      return width;
+    }
+
+    // GET AND ASSIGN CANOPY LENGTH
+    public static int[] getLength(String num){
       // This will always be the first 4 NUMBERS in num
       String length1 = "";
       String length2 = "";
       int lengthFt = 0;
       int lengthIn = 0;
+
       if (num.length() == 9) {
         if (num.substring(5,6).equals("0") && num.substring(4,5).equals("0")){
           length1 = num.substring(2,4);
@@ -160,16 +190,24 @@ public class ProductJson {
         }
       }
 
+      return new int[] {lengthFt, lengthIn};
+    }
+
+    public static double[] calculatePrice(){
       // The markup to be added to every canopy
       double markup = 175;
       // The paypal charge to be added to each canopy
       double percent = 0.03;
-
       DecimalFormat df = new DecimalFormat("#.##");
+      double shelter = 0;
+      double harbor = 0;
 
       // GET THE SHELTER RITE PRICE
+      Scanner scanner = new Scanner(System.in);
+      scanner.useLocale(Locale.ENGLISH);
+
       System.out.println("Enter the Shelter-Rite® price: ");
-      double shelter = scanner.nextDouble();
+      shelter = scanner.nextDouble();
       // Add the markup price and increse by 3%
       shelter = ((shelter + markup) * percent) + (shelter + markup);
       // Stop the price at two decimal points
@@ -177,20 +215,20 @@ public class ProductJson {
 
       // GET THE HARBOR TIME PRICE
       System.out.println("Enter the Harbor-Time™ price: ");
-      double harbor = scanner.nextDouble();
+      harbor = scanner.nextDouble();
       // Add the markup price and increse by 3%
       harbor = ((harbor + markup) * percent) + (harbor + markup);
       // Stop the price at two decimal points
       harbor = Double.parseDouble(df.format(harbor));
 
-      System.out.println("Product Number: " + num);
-      System.out.println("Brand: " + brandName);
-      System.out.println("Width: " + width + "in");
-      System.out.println("Length: " + lengthFt + "ft" + lengthIn + "in");
-      System.out.println("Shelter Price: " + shelter);
-      System.out.println("Harbor Price: " + harbor);
+      return new double[] {shelter, harbor};
+    }
 
-      // WRITE DATA AS JSON OBJECT TO FILE
+    // WRITE DATA AS JSON OBJECT TO FILE
+    public static void createJSON(
+    String num, String brandName,
+    int width, int lengthFt, int lengthIn,
+    double shelter, double harbor){
       JSONObject obj = new JSONObject();
   		obj.put("Name", "liftcanopies.com");
   		obj.put("Year", "2016");
@@ -223,5 +261,6 @@ public class ProductJson {
         e.printStackTrace();
       }
     }
+
 
 }
