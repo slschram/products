@@ -4,6 +4,7 @@ import java.text.*;
 import java.io.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import com.google.gson.Gson;
 
 /**
 * @author Sara Farkas
@@ -13,13 +14,16 @@ import org.json.simple.JSONObject;
 // To run: java -cp .:json-simple-1.1.1.jar ProductJson
 public class ProductJson {
    public static void main(String args[]) {
+    ArrayList<Object> productList = new ArrayList<Object>();
+    Object[] data = new Object[] {10};
+    int counter = 0;
+
     while (true){
       Scanner scanner = new Scanner(System.in);
       scanner.useLocale(Locale.ENGLISH);
 
       System.out.println("Enter the product number: ");
       String num = scanner.nextLine();
-      int counter = 0;
       //9 is the minimum char count for num
       //11 is the max char count for num
       if (num.equals("end")){
@@ -36,12 +40,17 @@ public class ProductJson {
           double shelter = priceResult[0];
           double harbor = priceResult[1];
 
-          createJSON(counter, num, brandName, width, lengthFt, lengthIn, shelter, harbor);
+          // TODO save products to an array at the end of each input, then add that single array to the json file
+          data = new Object[] {num, brandName, width, lengthFt, lengthIn, shelter, harbor};
+          // createJSON(counter, num, brandName, width, lengthFt, lengthIn, shelter, harbor);
 
-          counter ++;
+          productList.add(data);
+          data = new Object[] {10};
         }
       }
-  }
+
+      createJSON(productList);
+      }
 
     // GET AND ASSIGN BRAND NAME
     public static String getBrand(String num, Scanner scanner){
@@ -304,34 +313,19 @@ public class ProductJson {
     }
 
     // WRITE DATA AS JSON OBJECT TO FILE
-    public static void createJSON(int count, String num, String brandName,
-    int width, int lengthFt, int lengthIn,double shelter, double harbor){
-      JSONObject obj = new JSONObject();
-  		// obj.put("Name", "liftcanopies.com");
-  		// obj.put("Year", "2016");
+    public static void createJSON(ArrayList<Object> productList){
+       // public static void createJSON(int count, String num, String brandName,
+       // int width, int lengthFt, int lengthIn,double shelter, double harbor){
 
-  		// JSONArray products = new JSONArray();
-      JSONObject obj1 = new JSONObject();
-      // JSONObject obj2 = new JSONObject();
-
-  		obj1.put("id", num);
-      obj1.put("brand", brandName);
-      obj1.put("width", width);
-      obj1.put("lengthFt", lengthFt);
-      obj1.put("lengthIn", lengthIn);
-      obj1.put("shelterPrice", shelter);
-      obj1.put("harborPrice", harbor);
-
-      // obj1.put("product", obj2);
-
-      // products.add(obj2);
-  		obj.put(num, obj1);
+      // JSONObject obj = new JSONObject();
+     // 	obj.put(productList);
+     String json = new Gson().toJson(productList);
 
   		try {
         FileWriter file = new FileWriter("/Users/user/Desktop/products/products.json", true); {
-    			file.write(obj.toJSONString());
+    			file.write(json);
     			System.out.println("Successfully Copied JSON Object to File...");
-    			System.out.println("\nJSON Object: " + obj);
+    			System.out.println("\nJSON Object: " + json);
           file.close();
         }
   		} catch (IOException e) {
