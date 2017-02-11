@@ -10,8 +10,6 @@ import com.google.gson.Gson;
 * @author Sara Farkas
 */
 
-// To compile: javac -cp  /Users/user/Desktop/products/program/json-simple-1.1.1.jar ProductJson.java
-// To run: java -cp .:json-simple-1.1.1.jar ProductJson
 public class ProductJson {
    public static void main(String args[]) {
     ArrayList<Object> productList = new ArrayList<Object>();
@@ -25,36 +23,44 @@ public class ProductJson {
 
       System.out.println("Enter the product number: ");
       num = scanner.nextLine();
-      String two = num.substring(0,2).toUpperCase();
-      boolean validBrand = false;
-
-      // Make sure the first two characters are valid letters
-      if (two.equals("SM") || two.equals("BK")  || two.equals("DK") || two.equals("DR")
-      || two.equals("DL") || two.equals("FL") || two.equals("HM") || two.equals("HW") || two.equals("SS")
-      || two.equals("MS") || two.equals("LS") || two.equals("MX") || two.equals("NM")
-      || two.equals("CL") || two.equals("PP") || two.equals("PD") || two.equals("RL") || two.equals("VB")) {
-        validBrand = true;
-      }
-      // If the first two letters aren't valid, validBrand is false
-      else {validBrand = false;}
-
       // If the user types 'end', the program will end
       if (num.equals("end")){
         break;
       }
 
+      if (num.length() < 2) {
+        continue;
+      }
+
+      String two = num.substring(0,2).toUpperCase();
+      String three = num.substring(0,3).toUpperCase();
+      String four = num.substring(0,4).toUpperCase();
+      boolean validBrand = false;
+
+      // Make sure the first two characters are valid letters
+      if (two.equals("SM") || two.equals("DK") || two.equals("DR")
+      || two.equals("DL") || two.equals("FL") || two.equals("HM") || two.equals("SS")
+      || two.equals("MS") || two.equals("LS") || two.equals("NM")
+      || two.equals("CL") || two.equals("PP") || two.equals("PD") || two.equals("RL") || two.equals("VB")) {
+        validBrand = true;
+      }
+      // Check for valid 3 letters
+      else if (two.equals("BK") || two.equals("HW") || two.equals("MX") || two.equals("CL")) {
+        if (Character.isDigit(num.charAt(2))) {
+          validBrand = true;
+        }
+        else if (three.equals("BKT") || three.equals("HWA") || three.equals("MXT") || three.equals("CLT")) {
+          if (Character.isDigit(num.charAt(3))) {
+            validBrand = true;
+          }
+        }
+      }
+      // If the first two or three letters aren't valid, validBrand is false
+      else {validBrand = false;}
+
       // Input validation
       while (
-      validBrand == false ||
-
-      // // Make sure if the third character is a letters that they're valid
-      // !num.substring(0,3).toUpperCase().equals("BKT") ||
-      // !num.substring(0,3).toUpperCase().equals("HWA") ||
-      // !num.substring(0,3).toUpperCase().equals("MXT") ||
-      // !num.substring(0,3).toUpperCase().equals("CLT") ||
-      // // Make sure if the fourth character is a letter that they're valid
-      // !num.substring(0,4).toUpperCase().equals("CLTZ") ||
-      // )
+        validBrand == false ||
         // Make sure num is at least 9 character but no more than 11
         num.length() < 9 ||
         num.length() > 11 ||
@@ -74,16 +80,34 @@ public class ProductJson {
 
           System.out.println("\nPlease re-enter the product number: ");
           num = scanner.nextLine();
+
+          if (num.equals("end")){
+            break;
+          }
+
           two = num.substring(0,2).toUpperCase();
+          three = num.substring(0,3).toUpperCase();
+          four = num.substring(0,4).toUpperCase();
 
           // Reset validBrand & make sure the first two characters are valid letters
-          if (two.equals("SM") || two.equals("BK")  || two.equals("DK") || two.equals("DR")
-          || two.equals("DL") || two.equals("FL") || two.equals("HM") || two.equals("HW") || two.equals("SS")
-          || two.equals("MS") || two.equals("LS") || two.equals("MX") || two.equals("NM")
+          if (two.equals("SM") || two.equals("DK") || two.equals("DR")
+          || two.equals("DL") || two.equals("FL") || two.equals("HM") || two.equals("SS")
+          || two.equals("MS") || two.equals("LS") || two.equals("NM")
           || two.equals("CL") || two.equals("PP") || two.equals("PD") || two.equals("RL") || two.equals("VB")) {
             validBrand = true;
           }
-          // If the first two letters aren't valid, validBrand is false
+          // Check for valid 3 letters
+          else if (two.equals("BK") || two.equals("HW") || two.equals("MX") || two.equals("CL")) {
+            if (Character.isDigit(num.charAt(2))) {
+              validBrand = true;
+            }
+            else if (three.equals("BKT") || three.equals("HWA") || three.equals("MXT") || three.equals("CLT")) {
+              if (Character.isDigit(num.charAt(3))) {
+                validBrand = true;
+              }
+            }
+          }
+          // If the first two or three letters aren't valid, validBrand is false
           else {validBrand = false;}
 
       } // end while loop
@@ -113,7 +137,6 @@ public class ProductJson {
       String brandName = "";
       // Get the first two characters of the input
       String firstTwo = num.substring(0,2).toUpperCase();
-
       // Determine if the third character is a number
       // Matches SM, BK, DK, DR, DL, FL, HM, HW, SS, MS, LS, MX, NM, CL, PP, PD, RL, VB
       boolean char3 = Character.isDigit(num.charAt(2));
@@ -219,7 +242,8 @@ public class ProductJson {
           !Character.isDigit(num.charAt(num.length()-4)) ||
           !Character.isDigit(num.charAt(num.length()-5)) ||
           !Character.isDigit(num.charAt(num.length()-6)) ||
-          !Character.isDigit(num.charAt(num.length()-7))
+          !Character.isDigit(num.charAt(num.length()-7)) ||
+          !num.substring(0,4).toUpperCase().equals("CLTZ")
           ) {
 
             System.out.println("Brand not recognized, try again.");
