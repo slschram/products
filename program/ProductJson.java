@@ -17,13 +17,46 @@ public class ProductJson {
     ArrayList<Object> productList = new ArrayList<Object>();
     Object[] data = new Object[] {10};
     int counter = 0;
+    String num = "";
 
     while (true){
       Scanner scanner = new Scanner(System.in);
       scanner.useLocale(Locale.ENGLISH);
 
+      // System.out.println("Enter the product number: ");
+      // String num = scanner.nextLine();
+
+      // Make sure num is at least 9 character but no more than 11
+    do {
       System.out.println("Enter the product number: ");
-      String num = scanner.nextLine();
+        num = scanner.nextLine();
+        System.out.println(num.length());
+    } while(num.length() < 9 || num.length() > 10);
+
+      // Make sure num is at least 9 character but no more than 11
+      // if (num.length() < 9 || num.length() > 11) {
+      //   System.out.println("Wrong number of characters, please try again.");
+      //   num = scanner.nextLine();
+      // }
+
+      // Make sure the first two characters are letters
+      // if (Character.isDigit(num.charAt(0)) || Character.isDigit(num.charAt(1))) {
+      //   System.out.println("Oops, the first two characters should be letters, please try again.");
+      //   num = scanner.nextLine();
+      // }
+      //
+      // // Make sure the last 7 characters are digits
+      // for (int i = num.length(); i > 3; i--){
+      //   if (!Character.isDigit(num.charAt(i))){
+      //     System.out.println("Oops, the last 7 characters should be numbers, please try again.");
+      //     num = scanner.nextLine();
+      //   }
+      //   else {
+      //     // continue the program
+      //   }
+      // }
+
+
       //9 is the minimum char count for num
       //11 is the max char count for num
       if (num.equals("end")){
@@ -57,6 +90,7 @@ public class ProductJson {
       String brandName = "";
       // Get the first two characters of the input
       String firstTwo = num.substring(0,2).toUpperCase();
+
       // Determine if the third character is a number
       // SM, BK, DK, DR, DL, FL, HM, HW, SS, MS, LS, MX, NM, CL, PP, PD, RL, VB
       boolean char3 = Character.isDigit(num.charAt(2));
