@@ -23,45 +23,71 @@ public class ProductJson {
       Scanner scanner = new Scanner(System.in);
       scanner.useLocale(Locale.ENGLISH);
 
-      // System.out.println("Enter the product number: ");
-      // String num = scanner.nextLine();
-
-      // Make sure num is at least 9 character but no more than 11
-    do {
       System.out.println("Enter the product number: ");
-        num = scanner.nextLine();
-        System.out.println(num.length());
-    } while(num.length() < 9 || num.length() > 10);
+      num = scanner.nextLine();
+      String two = num.substring(0,2).toUpperCase();
+      boolean validBrand = false;
 
-      // Make sure num is at least 9 character but no more than 11
-      // if (num.length() < 9 || num.length() > 11) {
-      //   System.out.println("Wrong number of characters, please try again.");
-      //   num = scanner.nextLine();
-      // }
+      // Make sure the first two characters are valid letters
+      if (two.equals("SM") || two.equals("BK")  || two.equals("DK") || two.equals("DR")
+      || two.equals("DL") || two.equals("FL") || two.equals("HM") || two.equals("HW") || two.equals("SS")
+      || two.equals("MS") || two.equals("LS") || two.equals("MX") || two.equals("NM")
+      || two.equals("CL") || two.equals("PP") || two.equals("PD") || two.equals("RL") || two.equals("VB")) {
+        validBrand = true;
+      }
+      // If the first two letters aren't valid, validBrand is false
+      else {validBrand = false;}
 
-      // Make sure the first two characters are letters
-      // if (Character.isDigit(num.charAt(0)) || Character.isDigit(num.charAt(1))) {
-      //   System.out.println("Oops, the first two characters should be letters, please try again.");
-      //   num = scanner.nextLine();
-      // }
-      //
-      // // Make sure the last 7 characters are digits
-      // for (int i = num.length(); i > 3; i--){
-      //   if (!Character.isDigit(num.charAt(i))){
-      //     System.out.println("Oops, the last 7 characters should be numbers, please try again.");
-      //     num = scanner.nextLine();
-      //   }
-      //   else {
-      //     // continue the program
-      //   }
-      // }
-
-
-      //9 is the minimum char count for num
-      //11 is the max char count for num
+      // If the user types 'end', the program will end
       if (num.equals("end")){
         break;
-      } else {
+      }
+
+      // Input validation
+      while (
+      validBrand == false ||
+
+      // // Make sure if the third character is a letters that they're valid
+      // !num.substring(0,3).toUpperCase().equals("BKT") ||
+      // !num.substring(0,3).toUpperCase().equals("HWA") ||
+      // !num.substring(0,3).toUpperCase().equals("MXT") ||
+      // !num.substring(0,3).toUpperCase().equals("CLT") ||
+      // // Make sure if the fourth character is a letter that they're valid
+      // !num.substring(0,4).toUpperCase().equals("CLTZ") ||
+      // )
+        // Make sure num is at least 9 character but no more than 11
+        num.length() < 9 ||
+        num.length() > 11 ||
+        // Make sure there are at least 2 letters
+        Character.isDigit(num.charAt(0)) ||
+        Character.isDigit(num.charAt(1)) ||
+        // Make sure the last 7 characters are digits
+        // TODO refactor the below chunk of code
+        !Character.isDigit(num.charAt(num.length()-1)) ||
+        !Character.isDigit(num.charAt(num.length()-2)) ||
+        !Character.isDigit(num.charAt(num.length()-3)) ||
+        !Character.isDigit(num.charAt(num.length()-4)) ||
+        !Character.isDigit(num.charAt(num.length()-5)) ||
+        !Character.isDigit(num.charAt(num.length()-6)) ||
+        !Character.isDigit(num.charAt(num.length()-7))
+        ) {
+
+          System.out.println("\nPlease re-enter the product number: ");
+          num = scanner.nextLine();
+          two = num.substring(0,2).toUpperCase();
+
+          // Reset validBrand & make sure the first two characters are valid letters
+          if (two.equals("SM") || two.equals("BK")  || two.equals("DK") || two.equals("DR")
+          || two.equals("DL") || two.equals("FL") || two.equals("HM") || two.equals("HW") || two.equals("SS")
+          || two.equals("MS") || two.equals("LS") || two.equals("MX") || two.equals("NM")
+          || two.equals("CL") || two.equals("PP") || two.equals("PD") || two.equals("RL") || two.equals("VB")) {
+            validBrand = true;
+          }
+          // If the first two letters aren't valid, validBrand is false
+          else {validBrand = false;}
+
+      } // end while loop
+
           String brandName = getBrand(num, scanner);
           int width = getWidth(num);
 
@@ -73,17 +99,14 @@ public class ProductJson {
           double shelter = priceResult[0];
           double harbor = priceResult[1];
 
-          // TODO save products to an array at the end of each input, then add that single array to the json file
+          // TODO save products to an array at the end of each input
           data = new Object[] {num, brandName, width, lengthFt, lengthIn, shelter, harbor};
-          // createJSON(counter, num, brandName, width, lengthFt, lengthIn, shelter, harbor);
-
           productList.add(data);
           data = new Object[] {10};
-        }
       }
 
       createJSON(productList);
-      }
+    }
 
     // GET AND ASSIGN BRAND NAME
     public static String getBrand(String num, Scanner scanner){
@@ -92,79 +115,15 @@ public class ProductJson {
       String firstTwo = num.substring(0,2).toUpperCase();
 
       // Determine if the third character is a number
-      // SM, BK, DK, DR, DL, FL, HM, HW, SS, MS, LS, MX, NM, CL, PP, PD, RL, VB
+      // Matches SM, BK, DK, DR, DL, FL, HM, HW, SS, MS, LS, MX, NM, CL, PP, PD, RL, VB
       boolean char3 = Character.isDigit(num.charAt(2));
       String firstThree = num.substring(0,3).toUpperCase();
       // Determine if the fourth character is a number
-      // BKT, HWA, MXT, CLT
+      // Matches BKT, HWA, MXT, CLT
       boolean char4 = Character.isDigit(num.charAt(3));
       String firstFour = num.substring(0,4).toUpperCase();
       // Determine if the fifth character is a number
-      // CLTZ
-
-      // if(char3 == true){
-      //   switch(firstTwo){
-      //     case "SM": brandName = "ShoreMaster®";
-      //       break;
-      //     case "BK": brandName = "Beach King";
-      //       break;
-      //     case "DK": brandName = "DAKA";
-      //       break;
-      //     case "DR": brandName = "Dock'Rite";
-      //       break;
-      //     case "DL": brandName = "DuraLift";
-      //       break;
-      //     case "FL": brandName = "FLOE";
-      //       break;
-      //     case "HM": brandName = "Harbor Master";
-      //       break;
-      //     case "HW": brandName = "Hewitt Deluxe Front";
-      //       break;
-      //     case "SS": brandName = "ShoreStation® Aluminum";
-      //       break;
-      //     case "MS": brandName = "ShoreStation® Steel";
-      //       break;
-      //     case "LS": brandName = "Lake Shore Products";
-      //       break;
-      //     case "MX": brandName = "Max Docks";
-      //       break;
-      //     case "NM": brandName = "Newmans";
-      //       break;
-      //     case "CL": brandName = "Nucraft/Craftlander";
-      //       break;
-      //     case "PP": brandName = "Pier Pleasure";
-      //       break;
-      //     case "PD": brandName = "Porta-Dock";
-      //       break;
-      //     case "RL": brandName = "RidgeLine";
-      //       break;
-      //     case "VB": brandName = "Vibo";
-      //       break;
-      //   }
-      //   return brandName;
-      // } else if(char3 == true){
-      //   switch(firstThree){
-      //     case "BKT": brandName = "Beach King Tower";
-      //       break;
-      //     case "HWA": brandName = "Hewitt Flat Front";
-      //       break;
-      //     case "MXT": brandName = "Max Docks Tower";
-      //       break;
-      //     case "CLT": brandName = "Nucraft/Craftlander High Top Canopy";
-      //       break;
-      //   }
-      //   return brandName;
-      // } else if(char4 == true) {
-      //   switch(firstThree){
-      //     case "CLTZ": brandName = "Nucraft/Craftlander High Top Zip Tower";
-      //       break;
-      //   }
-      //   return brandName;
-      // } else {
-      //   System.out.println("Brand not recognized, try again.");
-      //   String newNum = scanner.nextLine();
-      //   brandName = getBrand(newNum, scanner);
-      // }
+      // Matches CLTZ
 
       if(firstTwo.equals("SM") && char3 == true){
         brandName = "ShoreMaster®";
@@ -244,9 +203,30 @@ public class ProductJson {
         brandName = "Vibo";
       }
       else {
-        System.out.println("Brand not recognized, try again.");
-        String newNum = scanner.nextLine();
-        brandName = getBrand(newNum, scanner);
+        // Input validation
+        while (
+          // Make sure num is at least 9 character but no more than 11
+          num.length() < 9 ||
+          num.length() > 10 ||
+          // Make sure at least the first two characters are letters
+          Character.isDigit(num.charAt(0)) ||
+          Character.isDigit(num.charAt(1)) ||
+          // Make sure the last 7 characters are digits
+          // TODO refactor the below chunk of code
+          !Character.isDigit(num.charAt(num.length()-1)) ||
+          !Character.isDigit(num.charAt(num.length()-2)) ||
+          !Character.isDigit(num.charAt(num.length()-3)) ||
+          !Character.isDigit(num.charAt(num.length()-4)) ||
+          !Character.isDigit(num.charAt(num.length()-5)) ||
+          !Character.isDigit(num.charAt(num.length()-6)) ||
+          !Character.isDigit(num.charAt(num.length()-7))
+          ) {
+
+            System.out.println("Brand not recognized, try again.");
+            String newNum = scanner.nextLine();
+            brandName = getBrand(newNum, scanner);
+
+        } // end while loop
       }
 
       return brandName;
@@ -328,16 +308,35 @@ public class ProductJson {
       Scanner scanner = new Scanner(System.in);
       scanner.useLocale(Locale.ENGLISH);
 
-      System.out.println("Enter the Shelter-Rite® price: ");
-      shelter = scanner.nextDouble();
+      // System.out.println("Enter the Shelter-Rite® price: ");
+      // shelter = scanner.nextDouble();
+
+      while (true) {
+          System.out.println("Enter the Shelter-Rite® price:");
+          try {
+              shelter = Double.parseDouble(scanner.next());
+              break; // will only get to here if input was a double
+          } catch (NumberFormatException ignore) {
+              System.out.println("Invalid input");
+          }
+      }
+
       // Add the markup price and increse by 3%
       shelter = ((shelter + markup) * percent) + (shelter + markup);
       // Stop the price at two decimal points
       shelter = Double.parseDouble(df.format(shelter));
 
       // GET THE HARBOR TIME PRICE
-      System.out.println("Enter the Harbor-Time™ price: ");
-      harbor = scanner.nextDouble();
+      while (true) {
+          System.out.println("Enter the Harbor-Time™ price:");
+          try {
+              harbor = Double.parseDouble(scanner.next());
+              break; // will only get to here if input was a double
+          } catch (NumberFormatException ignore) {
+              System.out.println("Invalid input");
+          }
+      }
+
       // Add the markup price and increse by 3%
       harbor = ((harbor + markup) * percent) + (harbor + markup);
       // Stop the price at two decimal points
