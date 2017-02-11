@@ -124,7 +124,9 @@ public class ProductJson {
           double harbor = priceResult[1];
 
           // TODO save products to an array at the end of each input
-          data = new Object[] {num, brandName, width, lengthFt, lengthIn, shelter, harbor};
+          data = new Object[] {"productNumber: " + num, "brandName: " + brandName,
+            "width: " + width, "lengthFt: " + lengthFt, "lengthIn: " + lengthIn,
+            "shelterRite: " + shelter, "harborTime: " + harbor};
           productList.add(data);
           data = new Object[] {10};
       }
