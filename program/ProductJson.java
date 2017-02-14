@@ -10,6 +10,8 @@ import com.google.gson.Gson;
 * @author Sara Farkas
 */
 
+// To compile: javac -cp .:gson-2.8.0.jar:.:json-simple-1.1.1.jar ProductJson.java
+// To run: java -cp .:gson-2.8.0.jar:.:json-simple-1.1.1.jar ProductJson
 public class ProductJson {
    public static void main(String args[]) {
     ArrayList<Object> productList = new ArrayList<Object>();
